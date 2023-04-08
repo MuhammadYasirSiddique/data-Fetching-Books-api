@@ -19,10 +19,9 @@ async function getfictionBooks() {
     const data = res.json();
     if (!res.ok) {
       isFetchOk1 = false;
-      throw new Error("Failed to fetch data");
     } else return data;
   } catch (error: any) {
-    return ["Something went wrong " + error.message];
+    return [];
   }
 }
 
@@ -33,10 +32,9 @@ async function getNonfictionBooks() {
     const data = res.json();
     if (!res.ok) {
       isFetchOk2 = false;
-      throw new Error("Failed to fetch data");
     } else return data;
   } catch (error: any) {
-    return ["Something went wrong " + error.message];
+    return [];
   }
 }
 
