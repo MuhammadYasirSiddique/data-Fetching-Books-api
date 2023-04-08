@@ -9,12 +9,16 @@ type Book = {
   available: boolean;
 };
 
+let isFetchOk1 = true;
+let isFetchOk2 = true;
+
 async function getfictionBooks() {
   try {
     const url = "https://simple-books-api.glitch.me/books?type=fiction";
     const res = await fetch(url, { cache: "no-store" });
     const data = res.json();
     if (!res.ok) {
+      isFetchOk1 = false;
       throw new Error("Failed to fetch data");
     } else return data;
   } catch (error: any) {
@@ -24,10 +28,11 @@ async function getfictionBooks() {
 
 async function getNonfictionBooks() {
   try {
-    const url = "https://simple-books-api.glitch.me/books?type=non-fiction";
+    const url = "https://simple-books-api.glitch.me/books?type=non-fictio";
     const res = await fetch(url, { cache: "no-store" });
     const data = res.json();
     if (!res.ok) {
+      isFetchOk2 = false;
       throw new Error("Failed to fetch data");
     } else return data;
   } catch (error: any) {
@@ -55,58 +60,96 @@ async function parallel() {
         <Link href={"/parallel"}> Parallel Page</Link>
         <Link href={"/sequential"}> Sequential Page</Link>
       </div>
-      <div className="text-center">
+      <div className="">
         <h1 className="text-center m-10">
           {" "}
           <strong> Parallel</strong> Data Fetching Page
         </h1>
       </div>
-      <h1 className="text-center">Fiction Books</h1>
+      <h2
+        className={
+          isFetchOk1
+            ? "text-center text-2xl font-extrabold "
+            : "text-center text-2xl font-extrabold text-red-800"
+        }
+      >
+        Fiction Books
+      </h2>
       <div className="flex justify-center m-5">
-        <table>
-          <thead>
-            <tr className="text-center">
-              <th>Book ID</th>
-              <th>Book Name</th>
-              <th>Book Type</th>
-              <th>IN Stock</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fiction.map((book: Book) => (
-              <tr key={book.id} className="text-center">
-                <td>{book.id}.</td>
-                <td className="text-left">{book.name} </td>
-                <td className="text-left">{book.type}</td>
-                <td>{book.available ? "Yes" : "No"}</td>
+        {isFetchOk1 ? (
+          <table>
+            <thead>
+              <tr className="text-center">
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Book Type</th>
+                <th>IN Stock</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {fiction.map((book: Book) => (
+                <tr key={book.id} className="text-center">
+                  <td>{book.id}.</td>
+                  <td className="text-left">{book.name} </td>
+                  <td className="text-left">{book.type}</td>
+                  <td>{book.available ? "Yes" : "No"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h1 className="text-xl text-center">
+            {" "}
+            <strong>
+              {" "}
+              Something Went Wrong, Data could not be fetched.{" "}
+            </strong>{" "}
+          </h1>
+        )}
       </div>
 
-      <h2 className="text-center">Non Fiction </h2>
+      <h2
+        className={
+          isFetchOk2
+            ? "text-center text-2xl font-extrabold"
+            : " text-center text-2xl font-extrabold text-red-800"
+        }
+      >
+        Non Fiction{" "}
+      </h2>
+
       <div className="flex justify-center m-5">
-        <table>
-          <thead>
-            <tr className="text-center">
-              <th>Book ID</th>
-              <th>Book Name</th>
-              <th>Book Type</th>
-              <th>IN Stock</th>
-            </tr>
-          </thead>
-          <tbody>
-            {nonfiction.map((book: Book) => (
-              <tr key={book.id} className="text-center">
-                <td>{book.id}.</td>
-                <td className="text-left">{book.name} </td>
-                <td className="text-left">{book.type}</td>
-                <td>{book.available ? "Yes" : "No"}</td>
+        {isFetchOk2 ? (
+          <table>
+            <thead>
+              <tr className="text-center">
+                <th>Book ID</th>
+                <th>Book Name</th>
+                <th>Book Type</th>
+                <th>IN Stock</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {nonfiction.map((book: Book) => (
+                <tr key={book.id} className="text-center">
+                  <td>{book.id}.</td>
+                  <td className="text-left">{book.name} </td>
+                  <td className="text-left">{book.type}</td>
+                  <td>{book.available ? "Yes" : "No"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <h1 className="text-xl text-center">
+            {" "}
+            <strong>
+              {" "}
+              Something Went Wrong, Data could not be fetched.{" "}
+            </strong>{" "}
+          </h1>
+        )}
       </div>
     </div>
   );
